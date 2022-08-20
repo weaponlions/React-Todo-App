@@ -8,6 +8,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 
 export default function NotesList() {
+    // use Context
+    const context = useContext(NoteContext)
     const navigate = useNavigate()
 
     //top loadin bar
@@ -18,13 +20,13 @@ export default function NotesList() {
         if (!('token' in localStorage)) {
             context.setLogin(false)
             localStorage.clear()
-            context.alert.show('Oh look, Login Session Expired')
+            context.alert('Oh look, Login Session Expired')
             navigate('/signin')
             setProgress(progress + 100)
         } else {
             try {
                 (async () => {
-                    let url = 'http://127.0.0.1:8000/api/notes/'
+                    let url = 'https://backendapitodo.herokuapp.com/api/notes/'
                     let data = await fetch(url, {
                         method: 'GET',
                         headers: {
@@ -42,15 +44,13 @@ export default function NotesList() {
             } catch (error) {
                 localStorage.clear()
                 context.setLogin(false)
-                context.alert.show('Oh look, Login Session Expired')
+                context.alert('Oh look, Login Session Expired')
             }
             setProgress(progress + 100)
         }
     },
         // eslint-disable-next-line
         [])
-    // use Context
-    const context = useContext(NoteContext)
     // reference instance
     const ref = useRef(null)
     const [upnote, setUpnote] = useState({
@@ -134,7 +134,7 @@ export default function NotesList() {
     const funcSearch = async (e) => {
         e.preventDefault()
         let value = document.getElementById('search').value;
-        let url = `http://127.0.0.1:8000/api/notes/?search=${value}`
+        let url = `https://backendapitodo.herokuapp.com/api/notes/?search=${value}`
         let data = await fetch(url, {
             method: 'GET',
             headers: {
@@ -142,6 +142,7 @@ export default function NotesList() {
             }
         })
         let js_data = await data.json()
+        console.log(js_data);
         if (js_data.code === 'token_not_valid') {
             localStorage.removeItem('token')
             navigate('/')
@@ -166,7 +167,7 @@ export default function NotesList() {
             </div>
             <div className="container">
                 {context.load === true ? <InfiniteScroll
-                    dataLength={context.notes.count} //This is important field to render the next data
+                    dataLength={context.notes.count || 0} //This is important field to render the next data
                     next={fetchData}
                     hasMore={context.notes.next !== null ? true : false}
                     loader={
@@ -178,13 +179,14 @@ export default function NotesList() {
                     }
                     endMessage={
                         <p style={{ textAlign: 'center' }}>
-                            <b>Yay! You have seen it all</b>
+                        {context.notes.results && context.notes.results.length === 0 ? 'No Data Found': 
+                            <b>Yay! You have seen it all</b> }
                         </p>
                     }
                 >
                     <div className="container">
                         <div className="row row-cols-1">
-                            {context.notes.results.map((ele) => {
+                            {context.notes.results && context.notes.results.map((ele) => {
                                 return (<NotesItem handleEdit={handleEdit} tag={ele.tag} note={ele} handleClickDelete={handleDelete} title={ele.title} key={ele.slug || (Math.floor(Math.random() * 100) + 1)} description={ele.description} id={ele.id} />)
                             })}
                         </div>

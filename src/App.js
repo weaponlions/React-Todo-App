@@ -2,13 +2,14 @@
 import NoteContext from './context/Context';
 import Routes from './components/RouteLink';
 import { useState, useEffect } from 'react';
-import LoadingBar from 'react-top-loading-bar';
-import { useAlert } from 'react-alert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
-  //alert obj
-  const alert = useAlert()
+  const main_url = 'https://backendapitodo.herokuapp.com/api/notes/';
+  //notification obj
+  const alert = (e) => toast(e);
   // login state status
   const [login, setLogin] = useState(true)
   //top loadin bar
@@ -16,7 +17,7 @@ function App() {
 
   const [load, setLoad] = useState(false)
   // store notes
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState({});
   // Add notes handle
   const [note, setNote] = useState({
     tag: '',
@@ -37,7 +38,7 @@ function App() {
   // add notes
   const funcAdd = async (tag, title, description) => {
     try {
-      let url = 'http://127.0.0.1:8000/api/notes/'
+      let url = main_url
       // eslint-disable-next-line
       const msg = await fetch(url, {
         method: 'POST',
@@ -59,17 +60,17 @@ function App() {
       })
       setProgress(progress + 50)
       setProgress(100)
-      alert.show('Oh look, Data Post Successfully!')
+      alert('Oh look, Data Post Successfully!')
 
     } catch (error) {
-      alert.show('Oh look, Data Not Post!' + error)
+      alert('Oh look, Data Not Post!' + error)
     }
   }
 
   // delete notes
   const funcDelete = async (id) => {
     try {
-      let url = 'http://127.0.0.1:8000/api/notes/' + id + '/';
+      let url = main_url + id + '/';
       // eslint-disable-next-line 
       let data = await fetch(url, {
         method: 'DELETE',
@@ -90,18 +91,18 @@ function App() {
           results: newNote
         })
         setProgress(100)
-        alert.show('Oh look, Data Delete Succesfully!')
+        alert('Oh look, Data Delete Succesfully!')
       })
     } catch (err) {
       setProgress(100)
-      alert.show('Oh look, Data Not Delete!')
+      alert('Oh look, Data Not Delete!')
     }
   }
 
   // update notes
   const funcUpdate = async (tag, title, description, id) => {
     try {
-      let url = 'http://127.0.0.1:8000/api/notes/' + id + '/'
+      let url = main_url + id + '/'
       // eslint-disable-next-line 
       let data = await fetch(url, {
         method: 'PUT',
@@ -133,7 +134,7 @@ function App() {
         next: notes.next,
         results: newNote
       })
-      alert.show('Oh look, Data Update Successfully!')
+      alert('Oh look, Data Update Successfully!')
 
     } catch (error) {
       console.log(error);
@@ -145,16 +146,12 @@ function App() {
     localStorage.clear()
     setLogin(false)
     setNotes('')
-    alert.show('Oh look, You Logout Successfully!')
+    alert('Oh look, You Logout Successfully!')
   }
   return (
     <>
       <NoteContext.Provider value={{ notes, setNotes, funcDelete, funcUpdate, funcAdd, note, setNote, funcLogout, alert, login, setLogin, load, setLoad }}>
-        <LoadingBar
-          color='#f11946'
-          progress={progress}
-          onLoaderFinished={() => setProgress(0)}
-        />
+      <ToastContainer />
         <Routes />
       </NoteContext.Provider>
     </>

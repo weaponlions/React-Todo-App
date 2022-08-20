@@ -19,7 +19,7 @@ const SignIn = () => {
             'username': document.getElementById('InputUsername').value,
             'password': document.getElementById('InputPassword').value
         }
-        const send = await fetch("http://127.0.0.1:8000/api/notes/login/", {
+        const send = await fetch("https://backendapitodo.herokuapp.com/api/notes/login/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -35,19 +35,19 @@ const SignIn = () => {
                 let token = js_data.token
                 localStorage.setItem('token', token)
                 context.setLogin(true)
-                context.alert.show('Oh look, You Login Successfully!')
+                context.alert('Oh look, You Login Successfully!')
                 navigate(-1);
             }
             // Field Required Error
             else if (status === 403) {
                 // call a alert
-                context.alert.show('Oh look, All field are Required!')
+                context.alert('Oh look, All field are Required!')
                 console.log(status);
             }
             // Invalid username and password
             else if (status === 404) {
                 //call a alert
-                context.alert.show('Oh look, Invalid Username and Password!')
+                context.alert('Oh look, Invalid Username and Password!')
                 console.log(status);
             }
         }
