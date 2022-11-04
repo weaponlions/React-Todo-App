@@ -29,7 +29,7 @@ const Navbar = () => {
                                 <Link className={`nav-link ${location.pathname === '/list' ? 'active' : ''} `} onClick={click} to="/list">List</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ''} `} onClick={click} to="/about">About</Link>
+                                <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ''} `} onClick={click} to="/about"></Link>
                             </li>
                         </ul>
 
