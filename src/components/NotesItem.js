@@ -4,7 +4,7 @@ import React from "react";
 export default function NotesItem(props) {
   return (
     <div>
-      <div className="card m-3" style={{ 'width': '70rem', 'backgroundColor': 'hsl(0deg 0% 96%)' }}>
+      <div className="card m-3 mx-5" style={{ 'width': '90%', 'backgroundColor': 'hsl(0deg 0% 96%)' }}>
         <div className="card-body">
           <div className="d-flex justify-content-between border-bottom pb-2">
             <div className="title">
