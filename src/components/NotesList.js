@@ -169,6 +169,7 @@ export default function NotesList() {
                 {context.load === true ? <InfiniteScroll
                     dataLength={context.notes.count || 0} //This is important field to render the next data
                     next={fetchData}
+                    style={{ overflowY: 'hidden' }}
                     hasMore={context.notes.next !== null ? true : false}
                     loader={
                         <div className=" text-center" >
